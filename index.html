@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Knowledge Assessment</title>
+  <link href="./styles/style.css" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <section class="hero">
+      <lottie-player
+        src="https://lottie.host/7e524c6b-14b5-420b-a4ef-b36ec5eeb0e4/RcyNPkhDn9.json"
+        background="transparent"
+        speed="1"
+        style="width: 200px; height: 200px;"
+        loop
+        autoplay>
+      </lottie-player>
+      <h1>Discover Your AI Readiness</h1>
+      <p class="subtext">Answer 10 quick questions and unlock your personalized AI learning path.</p>
+      <button class="cta-button" onclick="startQuiz()">Start Assessment</button>
+    </section>
+
+    <main id="quizContainer" class="quiz-container"></main>
+    <section id="resultsContainer" class="results"></section>
+  </div>
+  <script src="./scripts/main.js"></script>
+</body>
+</html>
