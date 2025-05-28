@@ -47,6 +47,15 @@ function answer(userSaidYes) {
 
 async function sendToGPT() {
   const container = document.getElementById("resultsContainer");
+
+  // Show loading message first
+  container.innerHTML = `
+    <div class="card" id="resultCard">
+      <p><em>Generating your AI Learning Path...</em></p>
+    </div>
+  `;
+
+  // Fetch GPT result
   const res = await fetch("/api/gpt", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -55,14 +64,14 @@ async function sendToGPT() {
 
   const data = await res.json();
 
-  container.innerHTML = `
-    <div class="card">
-      <h2>Here's the deal...</h2>
-      <p>${data.result}</p>
-      <button onclick="window.location.href='/custom.html'" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; background: #111; color: white; border: none; border-radius: 12px; cursor: pointer;">
-        Get a Custom Learning Path
-      </button>
-    </div>
+  // Replace loading message with result
+  document.getElementById("resultCard").innerHTML = `
+    <h2>Your AI Skill Profile</h2>
+    <p>${data.result}</p>
+    <button onclick="window.location.href='/custom.html'" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; background: #111; color: white; border: none; border-radius: 12px; cursor: pointer;">
+      Get a Custom Learning Path
+    </button>
   `;
 }
+
 
