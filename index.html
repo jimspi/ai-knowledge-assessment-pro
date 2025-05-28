@@ -4,19 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Knowledge Assessment</title>
-  <link href="styles/style.css" rel="stylesheet">
+  <link href="./styles/style.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <img src="public/animation.gif" alt="AI Animation" class="animated-graphic"/>
-      <h1>How AI-Ready Are You?</h1>
-      <p>Take our free quiz and get your personalized AI learning path powered by GPT.</p>
-      <button onclick="startQuiz()">Take the Assessment</button>
-    </header>
-    <main id="quizContainer"></main>
-    <div id="resultsContainer"></div>
+  <div class="wrapper">
+    <section class="hero">
+      <img src="./public/animation.gif" alt="Animated AI" class="hero-img"/>
+      <h1>Discover Your AI Readiness</h1>
+      <p class="subtext">Answer 10 quick questions and unlock your personalized AI learning path.</p>
+      <button class="cta-button" onclick="startQuiz()">Start Assessment</button>
+    </section>
+
+    <main id="quizContainer" class="quiz-container"></main>
+    <section id="resultsContainer" class="results"></section>
   </div>
-  <script src="scripts/main.js"></script>
+  <script src="./scripts/main.js"></script>
 </body>
 </html>
+
