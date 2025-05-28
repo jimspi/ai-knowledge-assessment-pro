@@ -23,7 +23,7 @@ function startQuiz() {
 function showQuestion() {
   const container = document.getElementById("quizContainer");
   if (currentQuestion >= questions.length) {
-    container.innerHTML = "<p>Generating your AI Learning Path...</p>";
+    container.innerHTML = ""; // Clear quiz area
     sendToGPT();
     return;
   }
@@ -46,32 +46,41 @@ function answer(userSaidYes) {
 }
 
 async function sendToGPT() {
+  // Clear quiz container
+  document.getElementById("quizContainer").innerHTML = "";
+
   const container = document.getElementById("resultsContainer");
 
-  // Show loading message first
+  // Show loading spinner
   container.innerHTML = `
     <div class="card" id="resultCard">
-      <p><em>Generating your AI Learning Path...</em></p>
+      <div class="spinner" style="margin: 2rem auto;"></div>
     </div>
   `;
 
-  // Fetch GPT result
-  const res = await fetch("/api/gpt", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ answers, score })
-  });
+  try {
+    const res = await fetch("/api/gpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers, score })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  // Replace loading message with result
-  document.getElementById("resultCard").innerHTML = `
-    <h2>Your AI Skill Profile</h2>
-    <p>${data.result}</p>
-    <button onclick="window.location.href='/custom.html'" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; background: #111; color: white; border: none; border-radius: 12px; cursor: pointer;">
-      Get a Custom Learning Path
-    </button>
-  `;
+    document.getElementById("resultCard").innerHTML = `
+      <h2>Your AI Skill Profile</h2>
+      <p>${data.result}</p>
+      <button onclick="window.location.href='/custom.html'" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; background: #111; color: white; border: none; border-radius: 12px; cursor: pointer;">
+        Get a Custom Learning Path
+      </button>
+    `;
+  } catch (err) {
+    document.getElementById("resultCard").innerHTML = `
+      <p><strong>Error:</strong> Failed to fetch learning path. Try again later.</p>
+    `;
+    console.error(err);
+  }
 }
+
 
 
