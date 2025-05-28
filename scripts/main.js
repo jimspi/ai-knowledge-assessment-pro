@@ -1,54 +1,68 @@
 const questions = [
-  { question: "Have you ever asked AI (like ChatGPT) to help you write something?", points: 2 },
-  { question: "Do you use voice assistants (like Siri or Alexa) in your daily life?", points: 1 },
-  { question: "Have you used AI to create an image, video, or voice recording?", points: 2 },
-  { question: "Would you trust AI to help plan your schedule or manage tasks?", points: 2 },
-  { question: "Have you used AI tools at work or for a side project?", points: 3 },
-  { question: "Do you know how to get better results by asking AI better questions?", points: 2 },
-  { question: "Have you explored using AI to learn new skills or improve your career?", points: 3 },
-  { question: "Would you feel comfortable letting AI help with customer support or sales?", points: 2 },
-  { question: "Do you understand how AI is already changing your job or industry?", points: 3 },
-  { question: "Are you curious and open to working alongside AI in the future?", points: 2 }
+  { q: "Have you ever used ChatGPT or another AI chatbot?", points: 1 },
+  { q: "Can you tell AI to write something for you, like an email or summary?", points: 1 },
+  { q: "Do you know how AI tools like Midjourney or DALL·E create images?", points: 1 },
+  { q: "Could you explain how AI can help automate boring tasks at work?", points: 1 },
+  { q: "Have you ever used voice-to-text or real-time translation apps?", points: 1 },
+  { q: "Do you understand what 'training data' means for AI?", points: 1 },
+  { q: "Have you tried using AI to generate video, music, or audio?", points: 1 },
+  { q: "Do you trust AI to give you reliable information?", points: 1 },
+  { q: "Would you know what to do if AI gave you a biased or weird answer?", points: 1 },
+  { q: "Do you feel confident you’ll need AI skills in the next 2 years?", points: 1 }
 ];
-let current = 0;
+
+let currentQuestion = 0;
 let score = 0;
-let userAnswers = [];
+let answers = [];
 
 function startQuiz() {
+  document.querySelector('.hero').style.display = 'none';
   showQuestion();
 }
 
 function showQuestion() {
-  const container = document.getElementById('quizContainer');
-  if (current >= questions.length) {
+  const container = document.getElementById("quizContainer");
+  if (currentQuestion >= questions.length) {
+    container.innerHTML = "<p>Generating your AI Learning Path...</p>";
     sendToGPT();
     return;
   }
-  const q = questions[current];
+
+  const q = questions[currentQuestion];
   container.innerHTML = `
     <div class="card">
-      <h2>${q.question}</h2>
-      <button onclick="answer(0, 'No')">No</button>
-      <button onclick="answer(${q.points}, 'Yes')">Yes</button>
-    </div>
-  `;
+      <h2>${q.q}</h2>
+      <button onclick="answer(true)">Yes</button>
+      <button onclick="answer(false)">No</button>
+    </div>`;
 }
 
-function answer(points, text) {
-  score += points;
-  userAnswers.push({ question: questions[current].question, answer: text });
-  current++;
+function answer(userSaidYes) {
+  const q = questions[currentQuestion];
+  answers.push({ question: q.q, answer: userSaidYes ? "Yes" : "No" });
+  if (userSaidYes) score += q.points;
+  currentQuestion++;
   showQuestion();
 }
 
 async function sendToGPT() {
-  const container = document.getElementById('quizContainer');
-  container.innerHTML = "<p>Generating your AI Learning Path...</p>";
-  const res = await fetch('/api/gpt', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers: userAnswers, score: score })
+  const container = document.getElementById("resultsContainer");
+  const res = await fetch("/api/gpt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers, score })
   });
+
   const data = await res.json();
-  document.getElementById('resultsContainer').innerText = data.result;
+
+  container.innerHTML = `
+    <div class="card">
+      <h2>Here's the deal...</h2>
+      <p>${data.result}</p>
+      <button onclick="window.location.href='/custom.html'" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; background: #111; color: white; border: none; border-radius: 12px; cursor: pointer;">
+        Get a Custom Learning Path
+      </button>
+    </div>
+  `;
 }
+
